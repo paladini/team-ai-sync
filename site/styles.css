@@ -254,6 +254,35 @@ p {
   gap: 12px;
 }
 
+.simple-explainer {
+  display: grid;
+  gap: 10px;
+  max-width: 680px;
+  margin: 0 0 28px;
+}
+
+.simple-explainer div {
+  padding: 14px 16px;
+  background: rgba(255, 255, 255, 0.78);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+
+.simple-explainer strong,
+.simple-explainer span {
+  display: block;
+}
+
+.simple-explainer strong {
+  margin-bottom: 4px;
+  color: var(--ink);
+}
+
+.simple-explainer span {
+  color: var(--muted);
+  line-height: 1.45;
+}
+
 .button {
   padding: 0 20px;
   border: 1px solid transparent;
@@ -772,6 +801,38 @@ pre code {
   border-radius: 8px;
 }
 
+.faq {
+  padding-top: 30px;
+  background: var(--surface-strong);
+}
+
+.faq-list {
+  display: grid;
+  gap: 12px;
+  max-width: 980px;
+}
+
+.faq-list details {
+  padding: 0;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+
+.faq-list summary {
+  min-height: 58px;
+  padding: 18px 22px;
+  color: var(--ink);
+  font-weight: 780;
+  cursor: pointer;
+}
+
+.faq-list p {
+  margin: 0;
+  padding: 0 22px 22px;
+  font-size: 0.98rem;
+}
+
 .site-footer {
   display: flex;
   justify-content: space-between;
@@ -925,6 +986,7 @@ pre code {
 
   .hero-copy,
   .hero-actions,
+  .simple-explainer,
   .proof-row,
   .hero-visual {
     width: min(354px, calc(100vw - 36px));

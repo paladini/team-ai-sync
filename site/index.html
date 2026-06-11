@@ -3,19 +3,88 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>team-ai-sync - Sync AI guidance across every repo</title>
+    <title>Sync AI Files Across Repos | team-ai-sync</title>
     <meta
       name="description"
-      content="team-ai-sync keeps AGENTS.md, CLAUDE.md, prompts, editor settings, and repository guidance aligned across GitHub, GitLab, and Bitbucket repositories through reviewable PRs and MRs."
+      content="team-ai-sync is an open-source GitHub Action, GitLab Component, and Bitbucket Pipe that syncs AGENTS.md, CLAUDE.md, prompts, and repo rules through PRs."
     />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
     <meta name="theme-color" content="#061513" />
+    <link rel="canonical" href="https://paladini.github.io/team-ai-sync/" />
     <meta property="og:title" content="team-ai-sync" />
     <meta
       property="og:description"
-      content="A CI/CD automation tool for syncing team AI assets across repositories with reviewable pull requests and merge requests."
+      content="Sync AI guidance files, prompts, and repository rules from one source repo to many target repos through reviewable PRs and MRs."
     />
     <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://paladini.github.io/team-ai-sync/" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="Sync AI Files Across Repos | team-ai-sync" />
+    <meta
+      name="twitter:description"
+      content="Open-source CI/CD automation for syncing AGENTS.md, CLAUDE.md, prompts, and repo rules across GitHub, GitLab, and Bitbucket."
+    />
     <link rel="stylesheet" href="styles.css" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "SoftwareSourceCode",
+        "name": "team-ai-sync",
+        "description": "Open-source CI/CD automation that syncs AI guidance files, prompts, editor settings, and repository rules from one source repository to many target repositories through pull requests or merge requests.",
+        "url": "https://paladini.github.io/team-ai-sync/",
+        "codeRepository": "https://github.com/paladini/team-ai-sync",
+        "downloadUrl": "https://hub.docker.com/r/paladini/team-ai-sync",
+        "license": "https://github.com/paladini/team-ai-sync/blob/main/LICENSE",
+        "programmingLanguage": "TypeScript",
+        "runtimePlatform": [
+          "GitHub Actions",
+          "GitLab CI/CD",
+          "Bitbucket Pipelines",
+          "Docker"
+        ],
+        "author": {
+          "@type": "Person",
+          "name": "Fernando Paladini",
+          "url": "https://github.com/paladini"
+        },
+        "sameAs": [
+          "https://github.com/paladini/team-ai-sync",
+          "https://hub.docker.com/r/paladini/team-ai-sync"
+        ]
+      }
+    </script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "What does team-ai-sync do?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "team-ai-sync copies configured files and directories from one source repository to multiple target repositories, then opens or updates pull requests or merge requests for review."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Which files can team-ai-sync sync?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "It can sync repository-relative files such as AGENTS.md, CLAUDE.md, .github instructions, prompt files, editor settings, Cursor rules, and shared repository conventions."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Which CI/CD platforms does team-ai-sync support?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "team-ai-sync supports GitHub repositories through a GitHub Action, GitLab projects through a GitLab CI/CD Component, and Bitbucket repositories through a Bitbucket Pipe."
+            }
+          }
+        ]
+      }
+    </script>
   </head>
   <body>
     <header class="site-header">
@@ -57,13 +126,29 @@
     <main id="top">
       <section class="hero section-pad">
         <div class="hero-copy">
-          <p class="plain-label">Open-source CI/CD automation</p>
-          <h1>Keep every repo aligned with your team's AI guidance</h1>
+          <p class="plain-label">Open-source repo file sync for AI teams</p>
+          <h1>Sync AI guidance files across repositories</h1>
           <p class="hero-lede">
-            Sync `AGENTS.md`, `CLAUDE.md`, prompts, editor settings, and shared
-            repository conventions from one source of truth into every target
-            repo through normal pull requests or merge requests.
+            <code>team-ai-sync</code> copies files such as <code>AGENTS.md</code>,
+            <code>CLAUDE.md</code>, prompts, editor settings, and repository
+            rules from one source repo to many target repos. It does not merge
+            directly. It opens pull requests or merge requests so each team can
+            review the change.
           </p>
+          <div class="simple-explainer" aria-label="How team-ai-sync works in plain English">
+            <div>
+              <strong>You maintain one source repo.</strong>
+              <span>Put the files every project should share in one place.</span>
+            </div>
+            <div>
+              <strong>CI runs team-ai-sync.</strong>
+              <span>The tool validates config, copies files, and creates a branch.</span>
+            </div>
+            <div>
+              <strong>Targets get PRs or MRs.</strong>
+              <span>Repository owners review and merge the generated updates.</span>
+            </div>
+          </div>
           <div class="hero-actions">
             <a class="button primary" href="https://github.com/paladini/team-ai-sync/blob/main/docs/getting-started.md">
               <svg viewBox="0 0 24 24" aria-hidden="true">
@@ -133,28 +218,29 @@ directories:
 
       <section class="value-strip" aria-label="What team-ai-sync gives you">
         <div>
-          <strong>One source of truth</strong>
-          <span>Centralize guidance once instead of copy-pasting it per repo.</span>
+          <strong>Problem it solves</strong>
+          <span>Stop manually copying AI instructions and prompt files across many repos.</span>
         </div>
         <div>
-          <strong>Review-first rollout</strong>
-          <span>Every target receives a normal PR or MR for local ownership.</span>
+          <strong>Best fit</strong>
+          <span>Platform, DevEx, and engineering teams that manage many service repos.</span>
         </div>
         <div>
-          <strong>Native CI/CD packaging</strong>
-          <span>Use the package that matches where your repositories live.</span>
+          <strong>Result</strong>
+          <span>Consistent agent guidance, prompts, and repo rules with reviewable changes.</span>
         </div>
       </section>
 
       <section id="how-it-works" class="section-pad split-section">
         <div class="section-copy">
           <p class="plain-label">How it works</p>
-          <h2>Sync shared assets without bypassing repo review</h2>
+          <h2>One config file controls what gets copied and where it goes</h2>
           <p>
-            The source repository owns `sync-config.json` and the files your team
-            wants to standardize. A CI workflow runs `team-ai-sync`, clones each
-            target, copies configured files, pushes a sync branch, and opens or
-            updates one review request per changed repository.
+            The source repository owns <code>sync-config.json</code> and the
+            shared files your team wants to standardize. A CI workflow runs
+            <code>team-ai-sync</code>, clones each target, copies configured
+            files, pushes a sync branch, and opens or updates one review
+            request per changed repository.
           </p>
         </div>
         <ol class="process-list">
@@ -226,7 +312,7 @@ directories:
             <div>
               <h3>GitHub Actions</h3>
               <p>
-                Use `paladini/team-ai-sync@v1` from the source repository
+                Use <code>paladini/team-ai-sync@v1</code> from the source repository
                 workflow. The token must be able to clone targets, push sync
                 branches, and create pull requests.
               </p>
@@ -243,7 +329,7 @@ directories:
               <h3>GitLab CI/CD Component</h3>
               <p>
                 Include the component from a GitLab source project and store
-                target project access in a CI/CD variable such as `GITLAB_TOKEN`.
+                target project access in a CI/CD variable such as <code>GITLAB_TOKEN</code>.
               </p>
               <a href="https://github.com/paladini/team-ai-sync/blob/main/docs/platforms.md#gitlab-cicd-component">Read GitLab setup</a>
             </div>
@@ -257,7 +343,7 @@ directories:
             <div>
               <h3>Bitbucket Pipe</h3>
               <p>
-                Call `paladini/team-ai-sync:1.0.0` from Bitbucket Pipelines and
+                Call <code>paladini/team-ai-sync:1.0.0</code> from Bitbucket Pipelines and
                 provide username and API token variables with repository access.
               </p>
               <a href="https://github.com/paladini/team-ai-sync/blob/main/docs/platforms.md#bitbucket-pipe">Read Bitbucket setup</a>
@@ -274,10 +360,11 @@ directories:
       <section class="assets section-pad">
         <div class="section-copy">
           <p class="plain-label">What to sync</p>
-          <h2>Share the files that make AI-assisted work consistent</h2>
+          <h2>Sync the files developers look for before using AI in a repo</h2>
           <p>
-            Keep instructions, prompts, review guidance, and editor defaults
-            aligned across API, web, infrastructure, and service repositories.
+            Keep coding-agent instructions, prompt templates, review guidance,
+            editor defaults, and repository conventions aligned across API,
+            web, infrastructure, and service repositories.
           </p>
         </div>
         <div class="asset-grid" aria-label="Common synchronized files">
@@ -333,7 +420,7 @@ directories:
             <h2>See the full lifecycle in public repos</h2>
             <p>
               The demo shows dry-run validation, PR creation, PR updates, merge,
-              and a final no-change run with `changed=false`.
+              and a final no-change run with <code>changed=false</code>.
             </p>
           </div>
           <div class="demo-links">
@@ -357,7 +444,7 @@ directories:
           </a>
           <a href="https://github.com/paladini/team-ai-sync/blob/main/docs/configuration.md">
             <strong>Configuration reference</strong>
-            <span>Understand every `sync-config.json` field and default.</span>
+            <span>Understand every <code>sync-config.json</code> field and default.</span>
           </a>
           <a href="https://github.com/paladini/team-ai-sync/blob/main/docs/authentication.md">
             <strong>Authentication</strong>
@@ -383,7 +470,7 @@ directories:
           <p class="plain-label">Safe by default</p>
           <h2>Designed for reviewable repository operations</h2>
           <p>
-            `team-ai-sync` does not merge generated PRs or MRs, bypass branch
+            <code>team-ai-sync</code> does not merge generated PRs or MRs, bypass branch
             protection, manage secrets, or change repository settings. It
             validates paths, rejects traversal, and keeps target maintainers in
             the approval loop.
@@ -392,7 +479,7 @@ directories:
         <div class="security-list">
           <div>
             <strong>Path safety</strong>
-            <span>Rejects absolute paths, `..`, `.git`, and paths outside repo roots.</span>
+            <span>Rejects absolute paths, <code>..</code>, <code>.git</code>, and paths outside repo roots.</span>
           </div>
           <div>
             <strong>Dry-run mode</strong>
@@ -402,6 +489,41 @@ directories:
             <strong>Force-with-lease updates</strong>
             <span>Updates existing sync branches without overwriting unexpected remote changes.</span>
           </div>
+        </div>
+      </section>
+
+      <section class="faq section-pad" aria-labelledby="faq-heading">
+        <div class="section-heading">
+          <p class="plain-label">Questions developers ask</p>
+          <h2 id="faq-heading">Plain answers before you install it</h2>
+        </div>
+        <div class="faq-list">
+          <details open>
+            <summary>What does team-ai-sync do?</summary>
+            <p>
+              It syncs selected files and directories from one source
+              repository to multiple target repositories. Instead of changing
+              target default branches directly, it creates or updates PRs and
+              MRs.
+            </p>
+          </details>
+          <details>
+            <summary>Why would a developer team use it?</summary>
+            <p>
+              Use it when many repos need the same <code>AGENTS.md</code>,
+              <code>CLAUDE.md</code>, prompts, code review rules, editor
+              settings, or AI-agent instructions, and you want updates to stay
+              reviewable.
+            </p>
+          </details>
+          <details>
+            <summary>Does it work only on GitHub?</summary>
+            <p>
+              No. Use the GitHub Action for GitHub repositories, the GitLab
+              CI/CD Component for GitLab projects, and the Bitbucket Pipe for
+              Bitbucket repositories.
+            </p>
+          </details>
         </div>
       </section>
     </main>

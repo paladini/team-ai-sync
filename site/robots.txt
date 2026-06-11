@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://paladini.github.io/team-ai-sync/sitemap.xml
