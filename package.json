@@ -1,0 +1,34 @@
+{
+  "name": "team-ai-sync",
+  "version": "0.1.0",
+  "private": true,
+  "description": "GitHub Action to sync team AI assets across repositories from a sync-config.json file.",
+  "type": "module",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json && ncc build lib/index.js -o dist --source-map --license licenses.txt",
+    "lint": "tsc --noEmit -p tsconfig.json",
+    "test": "vitest run",
+    "all": "npm run lint && npm test && npm run build"
+  },
+  "keywords": [
+    "github-action",
+    "sync",
+    "team-assets",
+    "ai"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "@actions/core": "^3.0.1",
+    "@actions/github": "^9.1.1",
+    "minimatch": "^10.1.1",
+    "zod": "^4.1.12"
+  },
+  "devDependencies": {
+    "@types/node": "^24.10.1",
+    "@vercel/ncc": "^0.38.4",
+    "typescript": "^5.9.3",
+    "vitest": "^4.0.14"
+  }
+}

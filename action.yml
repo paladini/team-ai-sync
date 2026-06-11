@@ -1,0 +1,34 @@
+name: Team AI Sync
+description: Sync team AI assets across GitHub repositories from a sync-config.json file.
+author: ''
+branding:
+  icon: refresh-cw
+  color: blue
+inputs:
+  github-token:
+    description: PAT or GitHub App token with read/write access to target repositories.
+    required: true
+  config-path:
+    description: Path to sync-config.json in the source repository.
+    required: false
+    default: sync-config.json
+  source-root:
+    description: Root directory containing the files and directories to sync.
+    required: false
+    default: ${{ github.workspace }}
+  dry-run:
+    description: Validate and simulate sync without pushing branches or creating pull requests.
+    required: false
+    default: 'false'
+outputs:
+  pr-urls:
+    description: JSON array of created or updated pull request URLs.
+  synced-targets:
+    description: JSON array of target repositories processed successfully.
+  failed-targets:
+    description: JSON array of target repositories that failed with error details.
+  changed:
+    description: 'true when at least one target repository had changes.'
+runs:
+  using: node24
+  main: dist/index.js

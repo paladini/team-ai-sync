@@ -1,0 +1,17 @@
+{
+  "targetRepositories": ["org/repo-a"],
+  "syncMode": "overwrite",
+  "deleteOrphans": false,
+  "files": [".editorconfig"],
+  "directories": [".github/instructions"],
+  "exclude": [".github/instructions/legacy-prompts.md"],
+  "prOptions": {
+    "title": "chore: sync team AI assets",
+    "body": "Synced from {{sourceRepo}} at {{sourceCommit}}.",
+    "commitMessage": "chore(ai-assets): sync team assets",
+    "branch": "chore/team-ai-sync",
+    "labels": ["automation", "chore"],
+    "userReviewers": [],
+    "teamReviewers": []
+  }
+}
