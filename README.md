@@ -10,6 +10,10 @@ Use it when your team wants one repository to be the source of truth for files s
 - `.editorconfig`
 - shared prompt or agent instruction files
 
+## About
+
+`team-ai-sync` was developed by and for the TLC community, the Tech Leads Club. It is meant to help technical leaders and their teams keep AI collaboration files, repository guidance, and shared development conventions aligned across many codebases without turning that maintenance into manual busywork.
+
 ## How it works
 
 You keep the shared assets and `sync-config.json` in one source repository. A workflow in that repository calls `team-ai-sync`. The action reads the config, checks each target repository, copies the configured files into a sync branch, and opens or updates pull requests for the destination teams to review.
