@@ -31,6 +31,7 @@ export async function cloneTargetRepository(
 }
 
 export async function checkoutSyncBranch(targetDirectory: string, branch: string): Promise<void> {
+  await runGitAllowFailure(['fetch', 'origin', `${branch}:refs/remotes/origin/${branch}`], targetDirectory);
   await runGit(['checkout', '-B', branch], targetDirectory);
 }
 
@@ -55,7 +56,19 @@ export async function commitAll(targetDirectory: string, message: string): Promi
 }
 
 export async function pushBranch(targetDirectory: string, branch: string): Promise<void> {
-  await runGit(['push', '--force-with-lease', 'origin', `HEAD:${branch}`], targetDirectory);
+  const remoteHead = await getRemoteBranchHead(targetDirectory, branch);
+  const lease = remoteHead ? `--force-with-lease=refs/heads/${branch}:${remoteHead}` : '--force-with-lease';
+  await runGit(['push', lease, 'origin', `HEAD:${branch}`], targetDirectory);
+}
+
+async function getRemoteBranchHead(targetDirectory: string, branch: string): Promise<string | undefined> {
+  const result = await runGitAllowFailure(['ls-remote', '--heads', 'origin', branch], targetDirectory);
+  if (result.exitCode !== 0) {
+    throw new Error(`git ls-remote failed: ${sanitize(result.stderr || result.stdout)}`);
+  }
+
+  const [sha] = result.stdout.trim().split(/\s+/);
+  return sha || undefined;
 }
 
 async function runGit(args: string[], cwd: string, secret?: string): Promise<string> {

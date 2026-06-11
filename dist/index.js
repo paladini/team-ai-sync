@@ -46622,6 +46622,7 @@ async function cloneTargetRepository(repo, token, defaultBranch, parentDirectory
     return targetDirectory;
 }
 async function checkoutSyncBranch(targetDirectory, branch) {
+    await runGitAllowFailure(['fetch', 'origin', `${branch}:refs/remotes/origin/${branch}`], targetDirectory);
     await runGit(['checkout', '-B', branch], targetDirectory);
 }
 async function configureCommitter(targetDirectory) {
@@ -46641,7 +46642,17 @@ async function commitAll(targetDirectory, message) {
     await runGit(['commit', '-m', message], targetDirectory);
 }
 async function pushBranch(targetDirectory, branch) {
-    await runGit(['push', '--force-with-lease', 'origin', `HEAD:${branch}`], targetDirectory);
+    const remoteHead = await getRemoteBranchHead(targetDirectory, branch);
+    const lease = remoteHead ? `--force-with-lease=refs/heads/${branch}:${remoteHead}` : '--force-with-lease';
+    await runGit(['push', lease, 'origin', `HEAD:${branch}`], targetDirectory);
+}
+async function getRemoteBranchHead(targetDirectory, branch) {
+    const result = await runGitAllowFailure(['ls-remote', '--heads', 'origin', branch], targetDirectory);
+    if (result.exitCode !== 0) {
+        throw new Error(`git ls-remote failed: ${sanitize(result.stderr || result.stdout)}`);
+    }
+    const [sha] = result.stdout.trim().split(/\s+/);
+    return sha || undefined;
 }
 async function runGit(args, cwd, secret) {
     const result = await runGitAllowFailure(args, cwd, secret);
