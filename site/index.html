@@ -1,0 +1,424 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>team-ai-sync - Sync AI guidance across every repo</title>
+    <meta
+      name="description"
+      content="team-ai-sync keeps AGENTS.md, CLAUDE.md, prompts, editor settings, and repository guidance aligned across GitHub, GitLab, and Bitbucket repositories through reviewable PRs and MRs."
+    />
+    <meta name="theme-color" content="#061513" />
+    <meta property="og:title" content="team-ai-sync" />
+    <meta
+      property="og:description"
+      content="A CI/CD automation tool for syncing team AI assets across repositories with reviewable pull requests and merge requests."
+    />
+    <meta property="og:type" content="website" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="brand" href="#top" aria-label="team-ai-sync home">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 32 32" role="img">
+            <path d="M6 10.5 16 4l10 6.5v11L16 28 6 21.5z" />
+            <path d="M16 4v24M6 10.5l10 6.4 10-6.4" />
+            <path d="m10 19 3 2 9-8" />
+          </svg>
+        </span>
+        <span>team-ai-sync</span>
+      </a>
+      <nav class="main-nav" aria-label="Primary navigation">
+        <a href="#how-it-works">How it works</a>
+        <a href="#platforms">Platforms</a>
+        <a href="#setup">Setup</a>
+        <a href="#docs">Docs</a>
+      </nav>
+      <div class="header-actions" aria-label="Project links">
+        <a class="header-action" href="https://github.com/paladini/team-ai-sync">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path
+              d="M12 .8a11.3 11.3 0 0 0-3.6 22c.6.1.8-.2.8-.5v-2c-3.2.7-3.9-1.4-3.9-1.4-.5-1.4-1.3-1.8-1.3-1.8-1.1-.7.1-.7.1-.7 1.2.1 1.9 1.3 1.9 1.3 1.1 1.9 2.9 1.3 3.6 1 .1-.8.4-1.3.8-1.6-2.6-.3-5.3-1.3-5.3-5.6 0-1.2.4-2.2 1.2-3.1-.1-.3-.5-1.5.1-3.1 0 0 1-.3 3.2 1.2a11 11 0 0 1 5.8 0c2.2-1.5 3.2-1.2 3.2-1.2.6 1.6.2 2.8.1 3.1.8.9 1.2 1.9 1.2 3.1 0 4.4-2.7 5.3-5.3 5.6.4.4.8 1.1.8 2.2v3c0 .3.2.6.8.5A11.3 11.3 0 0 0 12 .8Z"
+            />
+          </svg>
+          GitHub
+        </a>
+        <a class="header-action docker-action" href="https://hub.docker.com/r/paladini/team-ai-sync">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M4 11h16l-1.6 5.3A5.1 5.1 0 0 1 13.5 20H8.1A5.1 5.1 0 0 1 3 14.9V12a1 1 0 0 1 1-1Z" />
+            <path d="M6 8h3v3H6zM10 8h3v3h-3zM14 8h3v3h-3zM10 4h3v3h-3zM14 4h3v3h-3z" />
+          </svg>
+          Docker Hub
+        </a>
+      </div>
+    </header>
+
+    <main id="top">
+      <section class="hero section-pad">
+        <div class="hero-copy">
+          <p class="plain-label">Open-source CI/CD automation</p>
+          <h1>Keep every repo aligned with your team's AI guidance</h1>
+          <p class="hero-lede">
+            Sync `AGENTS.md`, `CLAUDE.md`, prompts, editor settings, and shared
+            repository conventions from one source of truth into every target
+            repo through normal pull requests or merge requests.
+          </p>
+          <div class="hero-actions">
+            <a class="button primary" href="https://github.com/paladini/team-ai-sync/blob/main/docs/getting-started.md">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M5 12h14M13 6l6 6-6 6" />
+              </svg>
+              Get started
+            </a>
+            <a class="button secondary" href="https://github.com/paladini/team-ai-sync/blob/main/docs/README.md">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M4 19.5V5.8A2.8 2.8 0 0 1 6.8 3H20v16H6.5A2.5 2.5 0 0 0 4 21.5" />
+                <path d="M8 7h8M8 11h8M8 15h5" />
+              </svg>
+              View docs
+            </a>
+          </div>
+          <div class="proof-row" aria-label="Project highlights">
+            <span>GitHub Action</span>
+            <span>GitLab Component</span>
+            <span>Bitbucket Pipe</span>
+            <span>MIT licensed</span>
+          </div>
+        </div>
+
+        <div class="hero-visual" aria-label="team-ai-sync workflow preview">
+          <div class="terminal-card">
+            <div class="terminal-bar">
+              <span></span><span></span><span></span>
+            </div>
+            <pre><code>targetRepositories:
+  - your-org/api-service
+  - your-org/web-app
+files:
+  - AGENTS.md
+  - CLAUDE.md
+directories:
+  - .github/instructions
+  - .github/prompts</code></pre>
+          </div>
+          <div class="flow-canvas">
+            <div class="flow-node source">
+              <span class="node-icon" aria-hidden="true">S</span>
+              <strong>Source repo</strong>
+              <small>shared AI assets</small>
+            </div>
+            <div class="flow-line" aria-hidden="true"></div>
+            <div class="flow-node engine">
+              <span class="node-icon" aria-hidden="true">T</span>
+              <strong>team-ai-sync</strong>
+              <small>validate, copy, branch</small>
+            </div>
+            <div class="flow-line" aria-hidden="true"></div>
+            <div class="target-stack" aria-label="Generated review requests">
+              <div class="pr-card">
+                <span>PR #18</span>
+                <strong>api-service</strong>
+                <small>chore: sync team AI assets</small>
+              </div>
+              <div class="pr-card">
+                <span>MR #42</span>
+                <strong>web-app</strong>
+                <small>reviewable changes</small>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="value-strip" aria-label="What team-ai-sync gives you">
+        <div>
+          <strong>One source of truth</strong>
+          <span>Centralize guidance once instead of copy-pasting it per repo.</span>
+        </div>
+        <div>
+          <strong>Review-first rollout</strong>
+          <span>Every target receives a normal PR or MR for local ownership.</span>
+        </div>
+        <div>
+          <strong>Native CI/CD packaging</strong>
+          <span>Use the package that matches where your repositories live.</span>
+        </div>
+      </section>
+
+      <section id="how-it-works" class="section-pad split-section">
+        <div class="section-copy">
+          <p class="plain-label">How it works</p>
+          <h2>Sync shared assets without bypassing repo review</h2>
+          <p>
+            The source repository owns `sync-config.json` and the files your team
+            wants to standardize. A CI workflow runs `team-ai-sync`, clones each
+            target, copies configured files, pushes a sync branch, and opens or
+            updates one review request per changed repository.
+          </p>
+        </div>
+        <ol class="process-list">
+          <li>
+            <span>01</span>
+            <div>
+              <strong>Maintain shared files</strong>
+              <p>Store agent instructions, prompts, editor defaults, and repo conventions in a source repo.</p>
+            </div>
+          </li>
+          <li>
+            <span>02</span>
+            <div>
+              <strong>Declare target repositories</strong>
+              <p>List target repos, files, directories, exclusions, branch names, labels, and reviewers.</p>
+            </div>
+          </li>
+          <li>
+            <span>03</span>
+            <div>
+              <strong>Run CI/CD automation</strong>
+              <p>Validate paths, simulate with dry runs, then create or update branches when changes exist.</p>
+            </div>
+          </li>
+          <li>
+            <span>04</span>
+            <div>
+              <strong>Review and merge locally</strong>
+              <p>Target maintainers keep control because generated changes land in PRs or MRs.</p>
+            </div>
+          </li>
+        </ol>
+      </section>
+
+      <section id="platforms" class="platforms section-pad">
+        <div class="section-heading">
+          <p class="plain-label">Supported platforms</p>
+          <h2>Use the native package for each CI/CD ecosystem</h2>
+          <p>
+            Cross-platform sync is not the operating model. GitHub repositories
+            use the GitHub Action, GitLab projects use the GitLab CI/CD
+            Component, and Bitbucket repositories use the Bitbucket Pipe.
+          </p>
+        </div>
+
+        <div class="platform-tabs" role="tablist" aria-label="Platform examples">
+          <button class="tab-button active" id="github-tab" type="button" role="tab" aria-selected="true" aria-controls="github-panel">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M12 .8a11.3 11.3 0 0 0-3.6 22c.6.1.8-.2.8-.5v-2c-3.2.7-3.9-1.4-3.9-1.4-.5-1.4-1.3-1.8-1.3-1.8-1.1-.7.1-.7.1-.7 1.2.1 1.9 1.3 1.9 1.3 1.1 1.9 2.9 1.3 3.6 1 .1-.8.4-1.3.8-1.6-2.6-.3-5.3-1.3-5.3-5.6 0-1.2.4-2.2 1.2-3.1-.1-.3-.5-1.5.1-3.1 0 0 1-.3 3.2 1.2a11 11 0 0 1 5.8 0c2.2-1.5 3.2-1.2 3.2-1.2.6 1.6.2 2.8.1 3.1.8.9 1.2 1.9 1.2 3.1 0 4.4-2.7 5.3-5.3 5.6.4.4.8 1.1.8 2.2v3c0 .3.2.6.8.5A11.3 11.3 0 0 0 12 .8Z" />
+            </svg>
+            GitHub
+          </button>
+          <button class="tab-button" id="gitlab-tab" type="button" role="tab" aria-selected="false" aria-controls="gitlab-panel">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="m22 13.3-.8-2.4-1.7-5.1c-.1-.4-.7-.4-.9 0L16.8 11H7.2L5.4 5.8c-.2-.4-.8-.4-.9 0l-1.7 5.1L2 13.3a1.8 1.8 0 0 0 .7 2l9.3 6.8 9.3-6.8a1.8 1.8 0 0 0 .7-2Z" />
+            </svg>
+            GitLab
+          </button>
+          <button class="tab-button" id="bitbucket-tab" type="button" role="tab" aria-selected="false" aria-controls="bitbucket-panel">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M3.7 3h16.6a.9.9 0 0 1 .9 1l-2.4 14.4a1.3 1.3 0 0 1-1.3 1.1H6.6L3.2 4a.9.9 0 0 1 .5-1Zm6.1 11.1h4.6l1.1-6.2H8.6Z" />
+            </svg>
+            Bitbucket
+          </button>
+        </div>
+
+        <div class="platform-panels">
+          <article class="platform-panel active" id="github-panel" role="tabpanel" aria-labelledby="github-tab">
+            <div>
+              <h3>GitHub Actions</h3>
+              <p>
+                Use `paladini/team-ai-sync@v1` from the source repository
+                workflow. The token must be able to clone targets, push sync
+                branches, and create pull requests.
+              </p>
+              <a href="https://github.com/paladini/team-ai-sync/blob/main/docs/platforms.md#github-actions">Read GitHub setup</a>
+            </div>
+            <pre><code>- uses: paladini/team-ai-sync@v1
+  with:
+    github-token: ${{ secrets.TEAM_SYNC_ADMIN_PAT }}
+    config-path: sync-config.json</code></pre>
+          </article>
+
+          <article class="platform-panel" id="gitlab-panel" role="tabpanel" aria-labelledby="gitlab-tab" hidden>
+            <div>
+              <h3>GitLab CI/CD Component</h3>
+              <p>
+                Include the component from a GitLab source project and store
+                target project access in a CI/CD variable such as `GITLAB_TOKEN`.
+              </p>
+              <a href="https://github.com/paladini/team-ai-sync/blob/main/docs/platforms.md#gitlab-cicd-component">Read GitLab setup</a>
+            </div>
+            <pre><code>include:
+  - component: gitlab.com/paladini/team-ai-sync/team-ai-sync@1.0.0
+    inputs:
+      config-path: sync-config.json</code></pre>
+          </article>
+
+          <article class="platform-panel" id="bitbucket-panel" role="tabpanel" aria-labelledby="bitbucket-tab" hidden>
+            <div>
+              <h3>Bitbucket Pipe</h3>
+              <p>
+                Call `paladini/team-ai-sync:1.0.0` from Bitbucket Pipelines and
+                provide username and API token variables with repository access.
+              </p>
+              <a href="https://github.com/paladini/team-ai-sync/blob/main/docs/platforms.md#bitbucket-pipe">Read Bitbucket setup</a>
+            </div>
+            <pre><code>- pipe: paladini/team-ai-sync:1.0.0
+  variables:
+    BITBUCKET_USERNAME: $BITBUCKET_USERNAME
+    BITBUCKET_TOKEN: $BITBUCKET_TOKEN
+    CONFIG_PATH: 'sync-config.json'</code></pre>
+          </article>
+        </div>
+      </section>
+
+      <section class="assets section-pad">
+        <div class="section-copy">
+          <p class="plain-label">What to sync</p>
+          <h2>Share the files that make AI-assisted work consistent</h2>
+          <p>
+            Keep instructions, prompts, review guidance, and editor defaults
+            aligned across API, web, infrastructure, and service repositories.
+          </p>
+        </div>
+        <div class="asset-grid" aria-label="Common synchronized files">
+          <code>AGENTS.md</code>
+          <code>CLAUDE.md</code>
+          <code>.github/copilot-instructions.md</code>
+          <code>.github/instructions/**</code>
+          <code>.github/prompts/**</code>
+          <code>.cursor/rules/**</code>
+          <code>.vscode/extensions.json</code>
+          <code>.editorconfig</code>
+        </div>
+      </section>
+
+      <section id="setup" class="setup section-pad">
+        <div class="section-heading">
+          <p class="plain-label">Setup path</p>
+          <h2>Start with a dry run, then scale with confidence</h2>
+        </div>
+        <div class="setup-grid">
+          <article>
+            <span>1</span>
+            <h3>Pick a source repo</h3>
+            <p>Create a dedicated guidance repo or use an existing platform repo owned by the team.</p>
+          </article>
+          <article>
+            <span>2</span>
+            <h3>Add sync rules</h3>
+            <p>Define target repositories, files, directories, exclusions, branch names, labels, and reviewers.</p>
+          </article>
+          <article>
+            <span>3</span>
+            <h3>Store a token</h3>
+            <p>Grant the smallest useful access for cloning targets, pushing branches, and opening review requests.</p>
+          </article>
+          <article>
+            <span>4</span>
+            <h3>Run a dry run</h3>
+            <p>Validate configuration and inspect planned changes before any branch or PR is created.</p>
+          </article>
+          <article>
+            <span>5</span>
+            <h3>Open real PRs or MRs</h3>
+            <p>Let target repository maintainers review, approve, and merge generated updates.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="demo section-pad">
+        <div class="demo-panel">
+          <div>
+            <p class="plain-label">Public demo</p>
+            <h2>See the full lifecycle in public repos</h2>
+            <p>
+              The demo shows dry-run validation, PR creation, PR updates, merge,
+              and a final no-change run with `changed=false`.
+            </p>
+          </div>
+          <div class="demo-links">
+            <a href="https://github.com/paladini/team-ai-sync-demo-source">Source repo</a>
+            <a href="https://github.com/paladini/team-ai-sync-demo-api/pull/1">API PR</a>
+            <a href="https://github.com/paladini/team-ai-sync-demo-web/pull/1">Web PR</a>
+            <a href="https://github.com/paladini/team-ai-sync/blob/main/docs/demo.md">Demo walkthrough</a>
+          </div>
+        </div>
+      </section>
+
+      <section id="docs" class="docs section-pad">
+        <div class="section-heading">
+          <p class="plain-label">Documentation</p>
+          <h2>Everything needed for production rollout</h2>
+        </div>
+        <div class="doc-grid">
+          <a href="https://github.com/paladini/team-ai-sync/blob/main/docs/getting-started.md">
+            <strong>Getting started</strong>
+            <span>Create the source repo, config, token, and first workflow.</span>
+          </a>
+          <a href="https://github.com/paladini/team-ai-sync/blob/main/docs/configuration.md">
+            <strong>Configuration reference</strong>
+            <span>Understand every `sync-config.json` field and default.</span>
+          </a>
+          <a href="https://github.com/paladini/team-ai-sync/blob/main/docs/authentication.md">
+            <strong>Authentication</strong>
+            <span>Choose tokens and permissions for target repositories.</span>
+          </a>
+          <a href="https://github.com/paladini/team-ai-sync/blob/main/docs/operations.md">
+            <strong>Operations guide</strong>
+            <span>Run dry runs, inspect outputs, and operate repository fleets.</span>
+          </a>
+          <a href="https://github.com/paladini/team-ai-sync/blob/main/docs/security.md">
+            <strong>Security model</strong>
+            <span>Review path safety, branch safety, and rollout boundaries.</span>
+          </a>
+          <a href="https://github.com/paladini/team-ai-sync/blob/main/docs/troubleshooting.md">
+            <strong>Troubleshooting</strong>
+            <span>Diagnose token, permission, branch, label, and config issues.</span>
+          </a>
+        </div>
+      </section>
+
+      <section class="security section-pad">
+        <div class="section-copy">
+          <p class="plain-label">Safe by default</p>
+          <h2>Designed for reviewable repository operations</h2>
+          <p>
+            `team-ai-sync` does not merge generated PRs or MRs, bypass branch
+            protection, manage secrets, or change repository settings. It
+            validates paths, rejects traversal, and keeps target maintainers in
+            the approval loop.
+          </p>
+        </div>
+        <div class="security-list">
+          <div>
+            <strong>Path safety</strong>
+            <span>Rejects absolute paths, `..`, `.git`, and paths outside repo roots.</span>
+          </div>
+          <div>
+            <strong>Dry-run mode</strong>
+            <span>Validate target changes without pushing branches or opening review requests.</span>
+          </div>
+          <div>
+            <strong>Force-with-lease updates</strong>
+            <span>Updates existing sync branches without overwriting unexpected remote changes.</span>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div>
+        <strong>team-ai-sync</strong>
+        <span>Made by <a href="https://github.com/paladini">Fernando Paladini</a>, with love for the Tech Leads Club community.</span>
+      </div>
+      <div class="footer-links">
+        <a href="https://github.com/paladini/team-ai-sync">Repository</a>
+        <a href="https://hub.docker.com/r/paladini/team-ai-sync">Docker Hub</a>
+        <a href="https://github.com/paladini/team-ai-sync/releases/tag/v1">v1 release</a>
+        <a href="https://github.com/paladini/team-ai-sync/blob/main/LICENSE">MIT license</a>
+      </div>
+    </footer>
+
+    <script src="script.js"></script>
+  </body>
+</html>

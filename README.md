@@ -4,6 +4,8 @@
 
 It is available as a GitHub Action, a GitLab CI/CD Component, and a Bitbucket Pipe. Each platform package is designed for repositories hosted on that same platform.
 
+Project site: [paladini.github.io/team-ai-sync](https://paladini.github.io/team-ai-sync/)
+
 Use it when your team wants one repository to be the source of truth for files such as:
 
 - `AGENTS.md`
