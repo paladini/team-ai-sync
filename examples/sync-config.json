@@ -2,8 +2,8 @@
   "targetRepositories": ["org/repo-a"],
   "syncMode": "overwrite",
   "deleteOrphans": false,
-  "files": [".editorconfig"],
-  "directories": [".github/instructions"],
+  "files": ["AGENTS.md", "CLAUDE.md", ".editorconfig"],
+  "directories": [".github/instructions", ".github/prompts"],
   "exclude": [".github/instructions/legacy-prompts.md"],
   "prOptions": {
     "title": "chore: sync team AI assets",

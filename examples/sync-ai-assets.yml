@@ -8,9 +8,11 @@ on:
 jobs:
   sync:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - uses: actions/checkout@v4
-      - uses: owner/team-ai-sync@v1
+      - uses: paladini/team-ai-sync@v1
         with:
           github-token: ${{ secrets.TEAM_SYNC_ADMIN_PAT }}
           config-path: sync-config.json
