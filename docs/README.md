@@ -1,11 +1,12 @@
 # team-ai-sync documentation
 
-`team-ai-sync` is a GitHub Action that keeps shared AI collaboration files,
-prompt files, editor settings, and repository guidance aligned across multiple
-repositories through pull requests.
+`team-ai-sync` keeps shared AI collaboration files, prompt files, editor
+settings, and repository guidance aligned across multiple repositories through
+pull requests or merge requests.
 
-Use this documentation to install the action, configure sync rules, create the
-right token, operate the workflow, and troubleshoot common failures.
+Use this documentation to install the GitHub Action, GitLab CI/CD Component, or
+Bitbucket Pipe; configure sync rules; create the right token; operate the
+workflow; and troubleshoot common failures.
 
 ## Guides
 
@@ -17,6 +18,8 @@ right token, operate the workflow, and troubleshoot common failures.
   App token and grant the smallest useful permissions.
 - [Operations guide](operations.md): run dry runs, update existing pull
   requests, inspect outputs, and manage repository fleets.
+- [Platform packages](platforms.md): use the GitHub Action, GitLab CI/CD
+  Component, or Bitbucket Pipe.
 - [Security model](security.md): understand path safety, token handling, pull
   request boundaries, and safe rollout practices.
 - [Public demo walkthrough](demo.md): follow the real public demo repositories,

@@ -10,7 +10,9 @@
 
 ## Milestone 2: Hardening
 
-- Marketplace-ready release notes and immutable version tags.
+- Marketplace-ready release notes and immutable version tags for GitHub, GitLab, and Bitbucket.
+- GitLab CI/CD Catalog release flow.
+- Bitbucket Pipe repository and Docker image release flow.
 - Better dry-run report artifacts.
 - Optional configuration schema export.
 - Integration smoke tests against disposable repositories.

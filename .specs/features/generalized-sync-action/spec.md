@@ -12,6 +12,9 @@
 - REQ-008: The PR engine creates or updates one pull request per target repository.
 - REQ-009: The action supports `{{sourceRepo}}` and `{{sourceCommit}}` placeholders in PR body.
 - REQ-010: Dry-run mode validates and simulates changes without pushing branches or creating pull requests.
+- REQ-011: The sync runtime is reusable from GitHub Actions, GitLab CI/CD Components, and Bitbucket Pipes.
+- REQ-012: GitLab targets support `group/project` and `group/subgroup/project` paths and create or update merge requests.
+- REQ-013: Bitbucket targets support `workspace/repo` paths and create or update pull requests.
 
 ## Acceptance Criteria
 
@@ -20,3 +23,5 @@
 - No PR is opened for a target with no diff.
 - Outputs are valid JSON strings for array outputs.
 - CI verifies lint, tests, build, and committed `dist/`.
+- GitHub Action inputs and outputs remain backward compatible.
+- GitLab and Bitbucket wrappers call the shared CLI/runtime rather than duplicating sync logic.

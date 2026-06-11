@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest';
-import { createOrUpdatePullRequest } from '../src/pull-request.js';
+import { GitHubPlatform } from '../src/platforms/github.js';
 
 describe('pull requests', () => {
   it('creates a PR, applies labels, and requests reviewers', async () => {
@@ -7,9 +7,9 @@ describe('pull requests', () => {
       pullsList: [],
       createResult: { number: 7, html_url: 'https://github.com/org/repo/pull/7' }
     });
+    const platform = new GitHubPlatform('secret', octokit);
 
-    const url = await createOrUpdatePullRequest(
-      octokit,
+    const url = await platform.createOrUpdateChangeRequest(
       { owner: 'org', repo: 'repo', fullName: 'org/repo' },
       {
         title: 'title',
@@ -41,9 +41,9 @@ describe('pull requests', () => {
       pullsList: [{ number: 3 }],
       updateResult: { number: 3, html_url: 'https://github.com/org/repo/pull/3' }
     });
+    const platform = new GitHubPlatform('secret', octokit);
 
-    const url = await createOrUpdatePullRequest(
-      octokit,
+    const url = await platform.createOrUpdateChangeRequest(
       { owner: 'org', repo: 'repo', fullName: 'org/repo' },
       {
         title: 'new title',

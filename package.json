@@ -5,6 +5,9 @@
   "description": "GitHub Action to sync team AI assets across repositories from a sync-config.json file.",
   "type": "module",
   "main": "dist/index.js",
+  "bin": {
+    "team-ai-sync": "./lib/cli.js"
+  },
   "scripts": {
     "build": "tsc -p tsconfig.build.json && ncc build lib/index.js -o dist --source-map --license licenses.txt",
     "lint": "tsc --noEmit -p tsconfig.json",

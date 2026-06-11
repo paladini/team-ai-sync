@@ -1,0 +1,19 @@
+name: Team AI Sync
+image: paladini/team-ai-sync:1.0.0
+description: Sync team AI assets across Bitbucket repositories from a sync-config.json file.
+repository: https://bitbucket.org/paladini/team-ai-sync
+maintainer:
+  name: Fernando Paladini
+  website: https://github.com/paladini/team-ai-sync
+tags:
+  - sync
+  - ai
+  - automation
+  - pull-requests
+variables:
+  - name: BITBUCKET_TOKEN
+    default: $BITBUCKET_TOKEN
+  - name: CONFIG_PATH
+    default: sync-config.json
+  - name: DRY_RUN
+    default: "false"

@@ -7,9 +7,10 @@ export async function cloneTargetRepository(
   repo: RepoRef,
   token: string,
   defaultBranch: string,
-  parentDirectory: string
+  parentDirectory: string,
+  remoteUrl = authenticatedGitHubRemoteUrl(repo.fullName, token)
 ): Promise<string> {
-  const targetDirectory = path.join(parentDirectory, `${repo.owner}-${repo.repo}`);
+  const targetDirectory = path.join(parentDirectory, `${repo.fullName.replace(/[\\/]/g, '-')}`);
   await fs.rm(targetDirectory, { recursive: true, force: true });
 
   await runGit(
@@ -19,14 +20,14 @@ export async function cloneTargetRepository(
       '1',
       '--branch',
       defaultBranch,
-      authenticatedRemoteUrl(repo.fullName, token),
+      remoteUrl,
       targetDirectory
     ],
     parentDirectory,
     token
   );
 
-  await runGit(['remote', 'set-url', 'origin', authenticatedRemoteUrl(repo.fullName, token)], targetDirectory, token);
+  await runGit(['remote', 'set-url', 'origin', remoteUrl], targetDirectory, token);
   return targetDirectory;
 }
 
@@ -35,9 +36,13 @@ export async function checkoutSyncBranch(targetDirectory: string, branch: string
   await runGit(['checkout', '-B', branch], targetDirectory);
 }
 
-export async function configureCommitter(targetDirectory: string): Promise<void> {
-  await runGit(['config', 'user.name', 'team-ai-sync[bot]'], targetDirectory);
-  await runGit(['config', 'user.email', 'team-ai-sync[bot]@users.noreply.github.com'], targetDirectory);
+export async function configureCommitter(
+  targetDirectory: string,
+  name = 'team-ai-sync[bot]',
+  email = 'team-ai-sync[bot]@users.noreply.github.com'
+): Promise<void> {
+  await runGit(['config', 'user.name', name], targetDirectory);
+  await runGit(['config', 'user.email', email], targetDirectory);
 }
 
 export async function hasWorkingTreeChanges(targetDirectory: string): Promise<boolean> {
@@ -114,10 +119,10 @@ async function runGitAllowFailure(
   });
 }
 
-function authenticatedRemoteUrl(fullName: string, token: string): string {
+function authenticatedGitHubRemoteUrl(fullName: string, token: string): string {
   return `https://x-access-token:${encodeURIComponent(token)}@github.com/${fullName}.git`;
 }
 
 function sanitize(value: string, secret?: string): string {
-  return secret ? value.replaceAll(secret, '***') : value;
+  return secret ? value.replaceAll(secret, '***').replaceAll(encodeURIComponent(secret), '***') : value;
 }

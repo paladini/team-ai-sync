@@ -5,6 +5,7 @@ import { normalizeRepoPath, resolveInside } from './path-safety.js';
 import type { RepoRef, SyncConfig } from './types.js';
 
 const repoNamePattern = /^[A-Za-z0-9_.-]+\/[A-Za-z0-9_.-]+$/;
+const projectPathPattern = /^[A-Za-z0-9_.-]+(?:\/[A-Za-z0-9_.-]+)+$/;
 const defaultPrOptions = {
   title: 'chore: sync team AI assets',
   body: 'Synced from {{sourceRepo}} at {{sourceCommit}}.',
@@ -17,7 +18,7 @@ const defaultPrOptions = {
 
 const configSchema = z
   .object({
-    targetRepositories: z.array(z.string().regex(repoNamePattern, 'Expected owner/repo')).min(1),
+    targetRepositories: z.array(z.string().regex(projectPathPattern, 'Expected owner/repo or group/project')).min(1),
     syncMode: z.enum(['overwrite', 'skip']).default('overwrite'),
     deleteOrphans: z.boolean().default(false),
     files: z.array(z.string()).default([]),
@@ -84,6 +85,19 @@ export function parseRepo(fullName: string): RepoRef {
 
   const [owner, repo] = fullName.split('/');
   return { owner, repo, fullName };
+}
+
+export function parseProjectPath(fullName: string): RepoRef {
+  if (!projectPathPattern.test(fullName)) {
+    throw new Error(`Invalid project path "${fullName}". Expected owner/repo or group/project.`);
+  }
+
+  const segments = fullName.split('/');
+  return {
+    owner: segments.slice(0, -1).join('/'),
+    repo: segments.at(-1) ?? '',
+    fullName
+  };
 }
 
 export function renderTemplate(template: string, sourceRepo: string, sourceCommit: string): string {

@@ -1,10 +1,16 @@
 # Authentication and permissions
 
-`team-ai-sync` needs a token that can read and write target repositories. The
-workflow's default `GITHUB_TOKEN` is usually not enough for cross-repository
-sync because it is scoped to the source repository.
+`team-ai-sync` needs a token that can read and write target repositories or
+projects. Built-in CI tokens are usually not enough for cross-repository sync
+because they are scoped to the source repository or project.
 
-## Recommended token types
+Use a token from the same platform as the package you are running:
+
+- GitHub Actions syncs GitHub repositories.
+- GitLab CI/CD Components sync GitLab projects.
+- Bitbucket Pipes sync Bitbucket repositories.
+
+## GitHub token types
 
 Use one of these token types:
 
@@ -62,6 +68,37 @@ Reference it from the workflow:
     github-token: ${{ secrets.TEAM_SYNC_ADMIN_PAT }}
     config-path: sync-config.json
 ```
+
+## GitLab tokens
+
+For GitLab, use a project, group, or personal access token that can read target
+projects, push branches, and create merge requests. Store it as a masked CI/CD
+variable in the source project. The component reads `GITLAB_TOKEN` by default:
+
+```yaml
+include:
+  - component: gitlab.com/paladini/team-ai-sync/team-ai-sync@1.0.0
+    inputs:
+      config-path: sync-config.json
+```
+
+To use a different variable name, pass `token-variable-name`.
+
+## Bitbucket tokens
+
+For Bitbucket, use an OAuth token, repository access token, or app password that
+can read target repositories, push branches, and create pull requests. Store it
+as a repository or workspace variable:
+
+```yaml
+- pipe: paladini/team-ai-sync:1.0.0
+  variables:
+    BITBUCKET_TOKEN: $BITBUCKET_TOKEN
+    CONFIG_PATH: 'sync-config.json'
+```
+
+When using an app password, also define `BITBUCKET_USERNAME`. Put the app
+password value in `BITBUCKET_TOKEN`.
 
 ## Rotation
 

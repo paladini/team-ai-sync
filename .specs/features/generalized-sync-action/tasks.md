@@ -6,3 +6,6 @@
 - [x] T004: Implement git and pull request orchestration.
 - [x] T005: Add tests for validation, sync behavior, PR flow, and dry-run outputs.
 - [x] T006: Build bundled `dist/` and verify local gates.
+- [x] T007: Extract shared runtime and CLI for non-GitHub CI packages.
+- [x] T008: Add GitLab and Bitbucket platform adapters.
+- [x] T009: Add GitLab Component, Bitbucket Pipe, Docker image, and platform docs.

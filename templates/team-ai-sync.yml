@@ -1,0 +1,31 @@
+spec:
+  description: Sync team AI assets across GitLab projects from a sync-config.json file.
+  inputs:
+    stage:
+      description: Pipeline stage used by the sync job.
+      default: deploy
+    image:
+      description: team-ai-sync OCI image to run.
+      default: paladini/team-ai-sync:1.0.0
+    config-path:
+      description: Path to sync-config.json in the source project.
+      default: sync-config.json
+    dry-run:
+      description: Validate and simulate sync without pushing branches or creating merge requests.
+      default: "false"
+    token-variable-name:
+      description: Name of the CI/CD variable containing a GitLab token with target project write access.
+      default: GITLAB_TOKEN
+---
+team-ai-sync:
+  stage: $[[ inputs.stage ]]
+  image:
+    name: $[[ inputs.image ]]
+    entrypoint: [""]
+  variables:
+    TEAM_AI_SYNC_PLATFORM: gitlab
+    CONFIG_PATH: $[[ inputs.config-path ]]
+    DRY_RUN: "$[[ inputs.dry-run ]]"
+  script:
+    - export TEAM_AI_SYNC_TOKEN="$(printenv "$[[ inputs.token-variable-name ]]")"
+    - node /app/lib/cli.js --platform gitlab
