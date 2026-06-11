@@ -78,7 +78,13 @@ installation token with access to every target repository.
 For most small demos or internal rollouts, a fine-grained PAT is enough. For
 long-lived organization automation, prefer a GitHub App.
 
-The token needs these permissions for the target repositories:
+For GitLab, create a project, group, or personal access token that can read
+target projects, push branches, and create merge requests.
+
+For Bitbucket, create an API token that can read target repositories, push
+branches, and create pull requests.
+
+On GitHub, the token needs these permissions for the target repositories:
 
 - `Contents: Read and write`
 - `Pull requests: Read and write`
@@ -91,7 +97,9 @@ scope.
 
 ## 5. Store the token as a secret
 
-In the source repository:
+Store the token in the source repository or project for the platform you use.
+
+For GitHub Actions, create an Actions secret in the source repository:
 
 1. Open **Settings**.
 2. Open **Secrets and variables**.
@@ -99,12 +107,24 @@ In the source repository:
 4. Create a repository secret named `TEAM_SYNC_ADMIN_PAT`.
 5. Store the token value.
 
+For GitLab CI/CD, create a masked CI/CD variable in the source project:
+
+```text
+GITLAB_TOKEN
+```
+
+For Bitbucket Pipelines, create repository or workspace variables:
+
+```text
+BITBUCKET_USERNAME
+BITBUCKET_TOKEN
+```
+
 Never commit the token to the repository.
 
-## 6. Add the workflow
+## 6. Add the CI/CD workflow
 
 For GitHub Actions, create `.github/workflows/sync-ai-assets.yml`:
-
 
 ```yaml
 name: Sync AI Assets
@@ -130,11 +150,41 @@ jobs:
 The workflow only needs read access to the source repository through
 `GITHUB_TOKEN`. The cross-repository writes happen through `github-token`.
 
-For GitLab and Bitbucket examples, see [Platform packages](platforms.md).
+For GitLab CI/CD, add this to `.gitlab-ci.yml` in the source project:
+
+```yaml
+include:
+  - component: gitlab.com/paladini/team-ai-sync/team-ai-sync@1.0.0
+    inputs:
+      config-path: sync-config.json
+```
+
+The component reads `GITLAB_TOKEN` by default. To use a different variable
+name, pass `token-variable-name`.
+
+For Bitbucket Pipelines, add this to `bitbucket-pipelines.yml` in the source
+repository:
+
+```yaml
+pipelines:
+  default:
+    - step:
+        name: Sync AI Assets
+        script:
+          - pipe: paladini/team-ai-sync:1.0.0
+            variables:
+              BITBUCKET_USERNAME: $BITBUCKET_USERNAME
+              BITBUCKET_TOKEN: $BITBUCKET_TOKEN
+              CONFIG_PATH: 'sync-config.json'
+```
+
+For more package details, see [Platform packages](platforms.md).
 
 ## 7. Run a dry run first
 
-Before creating pull requests, run a dry run:
+Before creating pull requests or merge requests, run a dry run.
+
+For GitHub Actions, add `dry-run: true`:
 
 ```yaml
 - uses: paladini/team-ai-sync@v1
@@ -144,13 +194,34 @@ Before creating pull requests, run a dry run:
     dry-run: true
 ```
 
+For GitLab CI/CD, pass the `dry-run` component input:
+
+```yaml
+include:
+  - component: gitlab.com/paladini/team-ai-sync/team-ai-sync@1.0.0
+    inputs:
+      config-path: sync-config.json
+      dry-run: "true"
+```
+
+For Bitbucket Pipelines, set `DRY_RUN` on the pipe:
+
+```yaml
+- pipe: paladini/team-ai-sync:1.0.0
+  variables:
+    BITBUCKET_USERNAME: $BITBUCKET_USERNAME
+    BITBUCKET_TOKEN: $BITBUCKET_TOKEN
+    CONFIG_PATH: 'sync-config.json'
+    DRY_RUN: 'true'
+```
+
 The dry run validates the config, clones target repositories, copies files into
 temporary worktrees, and reports whether changes exist. It does not push
 branches or create pull requests or merge requests.
 
 ## 8. Run the real sync
 
-Remove `dry-run: true` or set it to `false`. The action will:
+Remove the dry-run setting or set it to `false`. `team-ai-sync` will:
 
 1. Read and validate `sync-config.json`.
 2. Resolve each target repository's default branch.
