@@ -21,15 +21,6 @@ It is meant to help technical leaders and their teams keep AI collaboration file
 You keep the shared assets and `sync-config.json` in one source repository. A workflow in that repository calls `team-ai-sync`. The action reads the config, checks each target repository, copies the configured files into a sync branch, and opens or updates pull requests for the destination teams to review.
 
 ```mermaid
-%%{init: {'theme': 'base', 'themeVariables': {
-  'primaryColor': '#4f46e5', 'primaryTextColor': '#ffffff',
-  'primaryBorderColor': '#3730a3', 'lineColor': '#94a3b8',
-  'secondaryColor': '#10b981', 'tertiaryColor': '#f59e0b',
-  'background': '#ffffff', 'mainBkg': '#f8fafc',
-  'nodeBorder': '#cbd5e1', 'clusterBkg': '#f1f5f9',
-  'clusterBorder': '#e2e8f0', 'titleColor': '#1e293b',
-  'edgeLabelBackground': '#ffffff', 'textColor': '#334155'
-}}}%%
 graph LR
     subgraph sourceRepo["Source repository"]
         assets["Shared AI assets<br/>prompts, instructions, editor files"]
@@ -47,10 +38,10 @@ graph LR
 
     assets --> workflow
     config --> workflow
-    workflow -->|"passes token + config path"| action
-    action -->|"opens or updates PR"| repoA
-    action -->|"opens or updates PR"| repoB
-    action -->|"opens or updates PR"| repoC
+    workflow --> action
+    action --> repoA
+    action --> repoB
+    action --> repoC
 ```
 
 In practice:
