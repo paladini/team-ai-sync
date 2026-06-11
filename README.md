@@ -16,6 +16,16 @@ Use it when your team wants one repository to be the source of truth for files s
 - `.editorconfig`
 - shared prompts, agent instructions, code review guidelines, and repository conventions
 
+## Choose your platform
+
+Use the package that matches where your repositories live:
+
+| Platform | Use this package | Best for |
+| --- | --- | --- |
+| GitHub | [GitHub Marketplace Action](https://github.com/marketplace/actions/team-ai-sync) | GitHub repositories and GitHub Actions workflows |
+| GitLab | [GitLab CI/CD Catalog Component](https://gitlab.com/explore/catalog/paladini/team-ai-sync) | GitLab projects and GitLab CI/CD pipelines |
+| Bitbucket | `paladini/team-ai-sync:1.0.0` Bitbucket Pipe | Bitbucket repositories and Bitbucket Pipelines |
+
 ## How it works
 
 You keep the shared assets and `sync-config.json` in one source repository. A workflow in that repository calls `team-ai-sync`. The tool reads the config, checks each target repository, copies the configured files into a sync branch, and opens or updates pull requests or merge requests for the destination teams to review.
