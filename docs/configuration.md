@@ -30,7 +30,7 @@ input.
 
 | Field | Required | Default | Description |
 | --- | --- | --- | --- |
-| `targetRepositories` | yes | | Target repositories in `owner/repo` format. |
+| `targetRepositories` | yes | | Target repositories or projects. Use `owner/repo` on GitHub and Bitbucket, or `group/project` and `group/subgroup/project` on GitLab. |
 | `syncMode` | no | `overwrite` | How existing target files are handled. |
 | `deleteOrphans` | no | `false` | Whether files removed from synced source directories are removed from target directories. |
 | `files` | no | `[]` | Individual repository-relative files to sync. |
@@ -42,20 +42,24 @@ At least one entry must be present in `files` or `directories`.
 
 ## `targetRepositories`
 
-Use `owner/repo` values:
+Use platform-native repository paths:
 
 ```json
 {
   "targetRepositories": [
     "acme/api",
-    "acme/web"
+    "acme/web",
+    "platform/backend/service"
   ]
 }
 ```
 
-Each repository is processed independently. If one target fails, the action
+GitHub and Bitbucket use `owner/repo` or `workspace/repo`. GitLab also supports
+subgroups, such as `platform/backend/service`.
+
+Each repository is processed independently. If one target fails, `team-ai-sync`
 continues processing the remaining targets and reports failures in the
-`failed-targets` output.
+`failed-targets` output when the package supports CI outputs.
 
 ## `syncMode`
 
@@ -120,8 +124,8 @@ Exclusions apply to both `files` and recursively discovered directory files.
 
 ## `prOptions`
 
-`prOptions` controls the generated branch, commit, pull request, labels, and
-reviewers.
+`prOptions` controls the generated branch, commit, pull request or merge
+request, labels, and reviewers.
 
 | Field | Default | Description |
 | --- | --- | --- |
@@ -129,9 +133,9 @@ reviewers.
 | `body` | `Synced from {{sourceRepo}} at {{sourceCommit}}.` | Pull request body. |
 | `commitMessage` | `chore(ai-assets): sync team assets` | Commit message used in each target repository. |
 | `branch` | `chore/team-ai-sync` | Branch pushed to each target repository. |
-| `labels` | `["automation", "chore"]` | Labels added to generated pull requests. |
-| `userReviewers` | `[]` | GitHub usernames requested as reviewers. |
-| `teamReviewers` | `[]` | GitHub team names or slugs requested as reviewers. |
+| `labels` | `["automation", "chore"]` | Labels added to generated pull requests or merge requests when supported by the platform. |
+| `userReviewers` | `[]` | GitHub usernames requested as reviewers. Other platforms may ignore this field. |
+| `teamReviewers` | `[]` | GitHub team names or slugs requested as reviewers. Other platforms may ignore this field. |
 
 The `body` field supports these placeholders:
 

@@ -9,7 +9,7 @@ This guide covers day-to-day operation after `team-ai-sync` is installed.
 ### Dry run
 
 Use `dry-run: true` to validate configuration and detect changes without
-pushing branches or creating pull requests:
+pushing branches or creating pull requests or merge requests:
 
 ```yaml
 - uses: paladini/team-ai-sync@v1
@@ -48,18 +48,18 @@ Each run resets the sync branch from the target repository's default branch,
 copies configured files, commits changes, and pushes the branch with a safe
 force-with-lease update.
 
-## Pull request behavior
+## Pull request and merge request behavior
 
 For each changed target repository, the action:
 
-1. Looks for an open pull request from the configured sync branch to the target
+1. Looks for an open pull request or merge request from the configured sync branch to the target
    default branch.
-2. Updates the existing pull request title and body when one exists.
-3. Creates a new pull request when no matching open pull request exists.
-4. Applies labels when `prOptions.labels` is not empty.
-5. Requests reviewers when `userReviewers` or `teamReviewers` are configured.
+2. Updates the existing pull request or merge request title and body when one exists.
+3. Creates a new pull request or merge request when no matching open request exists.
+4. Applies labels when `prOptions.labels` is not empty and the platform supports it.
+5. Requests reviewers when `userReviewers` or `teamReviewers` are configured and the platform supports it.
 
-The action does not merge pull requests.
+`team-ai-sync` does not merge pull requests or merge requests.
 
 ## Outputs
 

@@ -1,6 +1,8 @@
 # team-ai-sync
 
-`team-ai-sync` is a public GitHub Action for syncing team AI assets, prompt files, editor settings, and shared development files from one source repository to multiple target repositories through pull requests.
+`team-ai-sync` is a CI/CD automation tool for syncing team AI assets, prompt files, editor settings, and shared development files from one source repository to multiple target repositories through pull requests or merge requests.
+
+It is available as a GitHub Action, a GitLab CI/CD Component, and a Bitbucket Pipe. Each platform package is designed for repositories hosted on that same platform.
 
 Use it when your team wants one repository to be the source of truth for files such as:
 
@@ -16,22 +18,22 @@ Use it when your team wants one repository to be the source of truth for files s
 
 ## How it works
 
-You keep the shared assets and `sync-config.json` in one source repository. A workflow in that repository calls `team-ai-sync`. The action reads the config, checks each target repository, copies the configured files into a sync branch, and opens or updates pull requests for the destination teams to review.
+You keep the shared assets and `sync-config.json` in one source repository. A workflow in that repository calls `team-ai-sync`. The tool reads the config, checks each target repository, copies the configured files into a sync branch, and opens or updates pull requests or merge requests for the destination teams to review.
 
 ```mermaid
 graph LR
     subgraph sourceRepo["Source repository"]
         assets["Shared AI assets<br/>agent guidelines, prompts, editor files"]
         config["sync-config.json<br/>targets, paths, PR options"]
-        workflow["GitHub workflow<br/>calls team-ai-sync"]
+        workflow["CI workflow<br/>calls team-ai-sync"]
     end
 
-    action["team-ai-sync action<br/>validate, copy, branch, PR"]
+    action["team-ai-sync<br/>validate, copy, branch, PR/MR"]
 
     subgraph targetRepos["Target repositories from sync-config.json"]
-        repoA["org/repo-a<br/>sync branch + pull request"]
-        repoB["org/repo-b<br/>sync branch + pull request"]
-        repoC["org/repo-c<br/>sync branch + pull request"]
+        repoA["org/repo-a<br/>sync branch + PR/MR"]
+        repoB["org/repo-b<br/>sync branch + PR/MR"]
+        repoC["org/repo-c<br/>sync branch + PR/MR"]
     end
 
     assets --> workflow
@@ -47,9 +49,9 @@ In practice:
 1. Update shared assets in the source repository.
 2. Add target repositories and sync rules to `sync-config.json`.
 3. Run the workflow manually or on push.
-4. Review and merge the generated PRs in each target repository.
+4. Review and merge the generated PRs or MRs in each target repository.
 
-## Live demo
+## GitHub live demo
 
 See the public demo repositories for a complete, real-world run:
 
@@ -72,11 +74,14 @@ Start with the [documentation index](docs/README.md), or jump directly to:
 - [Configuration reference](docs/configuration.md)
 - [Authentication and permissions](docs/authentication.md)
 - [Operations guide](docs/operations.md)
+- [Platform packages](docs/platforms.md)
 - [Security model](docs/security.md)
 - [Public demo walkthrough](docs/demo.md)
 - [Troubleshooting](docs/troubleshooting.md)
 
 ## Usage
+
+### GitHub Actions
 
 Create a workflow in the source repository:
 
@@ -103,7 +108,40 @@ The token must be a PAT or GitHub App token with permission to clone, push branc
 
 For production use, pin to the stable `paladini/team-ai-sync@v1` tag.
 
-## Inputs
+### GitLab CI/CD Component
+
+Include the component from a GitLab source project:
+
+```yaml
+include:
+  - component: gitlab.com/paladini/team-ai-sync/team-ai-sync@1.0.0
+    inputs:
+      config-path: sync-config.json
+```
+
+Store a GitLab token with target project write access in the source project as
+`GITLAB_TOKEN`, or pass a different variable name with `token-variable-name`.
+
+### Bitbucket Pipe
+
+Call the pipe from `bitbucket-pipelines.yml`:
+
+```yaml
+pipelines:
+  default:
+    - step:
+        name: Sync AI Assets
+        script:
+          - pipe: paladini/team-ai-sync:1.0.0
+            variables:
+              BITBUCKET_USERNAME: $BITBUCKET_USERNAME
+              BITBUCKET_TOKEN: $BITBUCKET_TOKEN
+              CONFIG_PATH: 'sync-config.json'
+```
+
+Set `BITBUCKET_USERNAME` to your Bitbucket username. `BITBUCKET_TOKEN` must be a Bitbucket API token with repository read/write and pull request access.
+
+## GitHub Action inputs
 
 | Input | Required | Default | Description |
 | --- | --- | --- | --- |
@@ -145,13 +183,13 @@ For production use, pin to the stable `paladini/team-ai-sync@v1` tag.
 
 ### Fields
 
-- `targetRepositories`: repositories to receive pull requests, in `owner/repo` format.
+- `targetRepositories`: repositories to receive pull requests or merge requests. Use `owner/repo` on GitHub and Bitbucket, or `group/project` and `group/subgroup/project` on GitLab.
 - `syncMode`: `overwrite` replaces configured paths; `skip` only copies missing files.
 - `deleteOrphans`: when `true`, removes files inside synced directories that no longer exist in source.
 - `files`: individual files to sync.
 - `directories`: directories to sync recursively.
 - `exclude`: paths or glob patterns to skip.
-- `prOptions`: title, body, commit message, branch, labels, reviewers, and team reviewers for generated PRs.
+- `prOptions`: title, body, commit message, branch, labels, reviewers, and team reviewers for generated PRs or MRs. Platform support for labels and reviewers varies.
 
 `{{sourceRepo}}` and `{{sourceCommit}}` are replaced in `prOptions.body`.
 
@@ -168,7 +206,7 @@ npm test
 npm run build
 ```
 
-`dist/` is committed because JavaScript GitHub Actions execute bundled code from the repository.
+`dist/` is committed because JavaScript GitHub Actions execute bundled code from the repository. The GitLab component and Bitbucket pipe run the packaged OCI image.
 
 ## Releases
 

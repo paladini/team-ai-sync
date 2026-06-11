@@ -2,7 +2,7 @@ import fs from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
 import { describe, expect, it } from 'vitest';
-import { loadConfig, parseRepo, renderTemplate } from '../src/config.js';
+import { loadConfig, parseProjectPath, parseRepo, renderTemplate } from '../src/config.js';
 
 describe('config', () => {
   it('loads defaults and normalizes paths', async () => {
@@ -39,6 +39,26 @@ describe('config', () => {
 
   it('rejects invalid repositories', async () => {
     expect(() => parseRepo('not-a-repo')).toThrow('Expected owner/repo');
+  });
+
+  it('accepts GitLab subgroup project paths in config', async () => {
+    const root = await tempDir();
+    await fs.writeFile(
+      path.join(root, 'sync-config.json'),
+      JSON.stringify({
+        targetRepositories: ['group/subgroup/repo'],
+        files: ['.editorconfig']
+      })
+    );
+
+    const config = await loadConfig('sync-config.json', root);
+
+    expect(config.targetRepositories).toEqual(['group/subgroup/repo']);
+    expect(parseProjectPath('group/subgroup/repo')).toEqual({
+      owner: 'group/subgroup',
+      repo: 'repo',
+      fullName: 'group/subgroup/repo'
+    });
   });
 
   it('renders source placeholders', () => {

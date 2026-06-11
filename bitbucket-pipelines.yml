@@ -1,0 +1,29 @@
+pipelines:
+  default:
+    - step:
+        name: Test
+        image: node:24
+        caches:
+          - node
+        script:
+          - npm ci
+          - npm run all
+  tags:
+    "*":
+      - step:
+          name: Test
+          image: node:24
+          caches:
+            - node
+          script:
+            - npm ci
+            - npm run all
+      - step:
+          name: Publish Docker image
+          image: docker:24
+          services:
+            - docker
+          script:
+            - echo "$DOCKERHUB_PASSWORD" | docker login --username "$DOCKERHUB_USERNAME" --password-stdin
+            - docker build -t "paladini/team-ai-sync:$BITBUCKET_TAG" .
+            - docker push "paladini/team-ai-sync:$BITBUCKET_TAG"

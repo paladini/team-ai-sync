@@ -1,7 +1,8 @@
 # Getting started
 
 This guide shows how to use `team-ai-sync` to copy shared team AI files from one
-source repository into one or more target repositories through pull requests.
+source repository into one or more target repositories through pull requests or
+merge requests.
 
 ## 1. Choose a source repository
 
@@ -68,8 +69,11 @@ token can read and write.
 
 ## 4. Create a token
 
-Create either a fine-grained personal access token or a GitHub App installation
-token with access to every target repository.
+Create a token for the platform you are using with access to every target
+repository or project.
+
+For GitHub, create either a fine-grained personal access token or a GitHub App
+installation token with access to every target repository.
 
 For most small demos or internal rollouts, a fine-grained PAT is enough. For
 long-lived organization automation, prefer a GitHub App.
@@ -99,7 +103,8 @@ Never commit the token to the repository.
 
 ## 6. Add the workflow
 
-Create `.github/workflows/sync-ai-assets.yml`:
+For GitHub Actions, create `.github/workflows/sync-ai-assets.yml`:
+
 
 ```yaml
 name: Sync AI Assets
@@ -125,6 +130,8 @@ jobs:
 The workflow only needs read access to the source repository through
 `GITHUB_TOKEN`. The cross-repository writes happen through `github-token`.
 
+For GitLab and Bitbucket examples, see [Platform packages](platforms.md).
+
 ## 7. Run a dry run first
 
 Before creating pull requests, run a dry run:
@@ -139,7 +146,7 @@ Before creating pull requests, run a dry run:
 
 The dry run validates the config, clones target repositories, copies files into
 temporary worktrees, and reports whether changes exist. It does not push
-branches or create pull requests.
+branches or create pull requests or merge requests.
 
 ## 8. Run the real sync
 
@@ -152,10 +159,10 @@ Remove `dry-run: true` or set it to `false`. The action will:
 5. Copy configured files and directories.
 6. Commit only when the target has changes.
 7. Push the sync branch.
-8. Create or update one pull request per changed target repository.
+8. Create or update one pull request or merge request per changed target repository.
 
 ## 9. Review and merge
 
-Review the generated pull requests in each target repository. The action never
-merges pull requests automatically. Target repository owners keep control of
-review, approval, and merge.
+Review the generated pull requests or merge requests in each target repository.
+`team-ai-sync` never merges them automatically. Target repository owners keep
+control of review, approval, and merge.
